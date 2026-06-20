@@ -87,7 +87,7 @@ export function OverviewPage({ onNavigate }: { onNavigate?: (tab: string) => voi
   const [loadError, setLoadError] = useState("");
 
   const loadData = useCallback(async () => {
-    if (!token) return;
+    if (!token) { setLoading(false); return; }
     setLoading(true);
     setLoadError("");
     try {
@@ -130,7 +130,21 @@ export function OverviewPage({ onNavigate }: { onNavigate?: (tab: string) => voi
     );
   }
 
-  if (data?.isNewUser) {
+  if (!data) {
+    return (
+      <div className="space-y-6">
+        <div>
+          <h2 className="text-xl font-bold tracking-tight">Overview</h2>
+          <p className="text-sm text-muted-foreground">Real-time dashboard of your staging platform.</p>
+        </div>
+        <div className="flex flex-col items-center gap-4 rounded-lg border px-6 py-12 text-center">
+          <p className="text-sm text-muted-foreground">Sign in to view your dashboard.</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (data.isNewUser) {
     return (
       <div className="space-y-6">
         <div>
@@ -165,8 +179,8 @@ export function OverviewPage({ onNavigate }: { onNavigate?: (tab: string) => voi
     );
   }
 
-  const s = data!.stats;
-  const chartData = data!.activityChart;
+  const s = data.stats;
+  const chartData = data.activityChart;
 
   const requestPie = [
     { name: "Successful", value: s.totalSuccessful, color: CHART_COLORS.success },

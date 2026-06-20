@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
 import { useRouter } from "@tanstack/react-router";
 
+import { logoutUser } from "./api/db.functions";
 import type { signupUser } from "./api/db.functions";
 
 type User = Awaited<ReturnType<typeof signupUser>>["user"];
@@ -42,11 +43,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   async function logout() {
+    const currentToken = token;
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(USER_KEY);
     setToken(null);
     setUser(null);
+    if (currentToken) {
+      logoutUser({ data: { token: currentToken } }).catch(() => {});
+    }
     await router.invalidate();
+    await router.navigate({ to: "/login" });
   }
 
   return (

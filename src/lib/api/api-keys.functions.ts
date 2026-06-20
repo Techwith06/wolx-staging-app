@@ -26,7 +26,7 @@ function generateApiKey(environment: string) {
 }
 
 export const createApiKey = createServerFn({ method: "POST" })
-  .inputValidator(
+  .validator(
     z.object({
       token: z.string(),
       name: z.string().min(1, "Name is required"),
@@ -66,7 +66,7 @@ export const createApiKey = createServerFn({ method: "POST" })
   });
 
 export const listApiKeys = createServerFn({ method: "POST" })
-  .inputValidator(z.object({ token: z.string() }))
+  .validator(z.object({ token: z.string() }))
   .handler(async ({ data }) => {
     const session = await getUserFromToken(data.token);
     if (!session) throw new Error("Unauthorized");
@@ -96,7 +96,7 @@ export const listApiKeys = createServerFn({ method: "POST" })
   });
 
 export const updateApiKeyStatus = createServerFn({ method: "POST" })
-  .inputValidator(
+  .validator(
     z.object({
       token: z.string(),
       keyId: z.string().uuid(),
@@ -117,7 +117,7 @@ export const updateApiKeyStatus = createServerFn({ method: "POST" })
   });
 
 export const deleteApiKey = createServerFn({ method: "POST" })
-  .inputValidator(
+  .validator(
     z.object({ token: z.string(), keyId: z.string().uuid() })
   )
   .handler(async ({ data }) => {
@@ -133,7 +133,7 @@ export const deleteApiKey = createServerFn({ method: "POST" })
   });
 
 export const regenerateApiKey = createServerFn({ method: "POST" })
-  .inputValidator(
+  .validator(
     z.object({ token: z.string(), keyId: z.string().uuid() })
   )
   .handler(async ({ data }) => {
@@ -160,7 +160,7 @@ export const regenerateApiKey = createServerFn({ method: "POST" })
   });
 
 export const getWebhookSettings = createServerFn({ method: "POST" })
-  .inputValidator(z.object({ token: z.string() }))
+  .validator(z.object({ token: z.string() }))
   .handler(async ({ data }) => {
     const session = await getUserFromToken(data.token);
     if (!session) throw new Error("Unauthorized");
@@ -175,7 +175,7 @@ export const getWebhookSettings = createServerFn({ method: "POST" })
   });
 
 export const upsertWebhookSettings = createServerFn({ method: "POST" })
-  .inputValidator(
+  .validator(
     z.object({
       token: z.string(),
       baseUrl: z.string().url("Invalid Base URL"),
@@ -221,7 +221,7 @@ export const upsertWebhookSettings = createServerFn({ method: "POST" })
   });
 
 export const getApiLogs = createServerFn({ method: "POST" })
-  .inputValidator(
+  .validator(
     z.object({ token: z.string(), limit: z.number().max(100).optional().default(50) })
   )
   .handler(async ({ data }) => {
@@ -240,7 +240,7 @@ export const getApiLogs = createServerFn({ method: "POST" })
   });
 
 export const getApiUsageStats = createServerFn({ method: "POST" })
-  .inputValidator(z.object({ token: z.string() }))
+  .validator(z.object({ token: z.string() }))
   .handler(async ({ data }) => {
     const session = await getUserFromToken(data.token);
     if (!session) throw new Error("Unauthorized");

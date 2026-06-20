@@ -77,11 +77,12 @@ export function ApiKeysPage() {
   const [webhookCallbackUrl, setWebhookCallbackUrl] = useState("");
   const [webhookSaving, setWebhookSaving] = useState(false);
   const [webhookSaved, setWebhookSaved] = useState(false);
+  const [webhookError, setWebhookError] = useState("");
 
   const [error, setError] = useState("");
 
   const loadData = useCallback(async () => {
-    if (!token) return;
+    if (!token) { setLoading(false); return; }
     setLoading(true);
     try {
       const [k, w, l, s] = await Promise.all([
@@ -160,6 +161,7 @@ export function ApiKeysPage() {
     if (!token) return;
     setWebhookSaving(true);
     setWebhookSaved(false);
+    setWebhookError("");
     try {
       await upsertWebhookSettings({
         data: {
@@ -172,7 +174,9 @@ export function ApiKeysPage() {
       setWebhookSaved(true);
       setTimeout(() => setWebhookSaved(false), 3000);
       await loadData();
-    } catch { /* silent */ }
+    } catch (e) {
+      setWebhookError(e instanceof Error ? e.message : "Failed to save settings");
+    }
     setWebhookSaving(false);
   }
 
@@ -332,6 +336,11 @@ export function ApiKeysPage() {
               {webhookSaved && (
                 <span className="flex items-center gap-1 text-sm text-emerald-600">
                   <Check className="h-4 w-4" /> Saved
+                </span>
+              )}
+              {webhookError && (
+                <span className="flex items-center gap-1 text-sm text-destructive">
+                  <AlertTriangle className="h-4 w-4" /> {webhookError}
                 </span>
               )}
             </div>

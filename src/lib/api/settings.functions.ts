@@ -7,7 +7,7 @@ import { userSettings, requestLogs, webhookLogs } from "../db/schema";
 import { getUserFromToken } from "../auth.server";
 
 export const getSettings = createServerFn({ method: "POST" })
-  .inputValidator(z.object({ token: z.string() }))
+  .validator(z.object({ token: z.string() }))
   .handler(async ({ data }) => {
     const session = await getUserFromToken(data.token);
     if (!session) throw new Error("Unauthorized");
@@ -51,7 +51,7 @@ export const getSettings = createServerFn({ method: "POST" })
   });
 
 export const updateSettings = createServerFn({ method: "POST" })
-  .inputValidator(
+  .validator(
     z.object({
       token: z.string(),
       appName: z.string().optional(),
@@ -123,7 +123,7 @@ export const updateSettings = createServerFn({ method: "POST" })
   });
 
 export const deleteAllLogs = createServerFn({ method: "POST" })
-  .inputValidator(z.object({ token: z.string() }))
+  .validator(z.object({ token: z.string() }))
   .handler(async ({ data }) => {
     const session = await getUserFromToken(data.token);
     if (!session) throw new Error("Unauthorized");

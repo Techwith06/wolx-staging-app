@@ -7,7 +7,7 @@ import { requestLogs } from "../db/schema";
 import { getUserFromToken } from "../auth.server";
 
 export const logRequest = createServerFn({ method: "POST" })
-  .inputValidator(
+  .validator(
     z.object({
       token: z.string(),
       method: z.string(),
@@ -44,7 +44,7 @@ export const logRequest = createServerFn({ method: "POST" })
   });
 
 export const listRequestLogs = createServerFn({ method: "POST" })
-  .inputValidator(
+  .validator(
     z.object({
       token: z.string(),
       filter: z.enum(["all", "2xx", "4xx", "5xx", "slow"]).optional().default("all"),
@@ -106,7 +106,7 @@ export const listRequestLogs = createServerFn({ method: "POST" })
   });
 
 export const getRequestLogStats = createServerFn({ method: "POST" })
-  .inputValidator(z.object({ token: z.string() }))
+  .validator(z.object({ token: z.string() }))
   .handler(async ({ data }) => {
     const session = await getUserFromToken(data.token);
     if (!session) throw new Error("Unauthorized");
@@ -142,7 +142,7 @@ export const getRequestLogStats = createServerFn({ method: "POST" })
   });
 
 export const deleteRequestLogs = createServerFn({ method: "POST" })
-  .inputValidator(
+  .validator(
     z.object({
       token: z.string(),
       retention: z.enum(["1day", "7days", "30days"]).optional(),

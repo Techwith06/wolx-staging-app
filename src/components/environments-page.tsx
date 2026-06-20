@@ -65,7 +65,7 @@ export function EnvironmentsPage() {
   const [submitting, setSubmitting] = useState(false);
 
   const loadData = useCallback(async () => {
-    if (!token) return;
+    if (!token) { setLoading(false); return; }
     setLoading(true);
     try {
       const [e, k] = await Promise.all([

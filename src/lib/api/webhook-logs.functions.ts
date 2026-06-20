@@ -41,7 +41,7 @@ function generateSignature(payload: unknown, secret: string): string {
 }
 
 export const getEventTemplates = createServerFn({ method: "POST" })
-  .inputValidator(z.object({ eventType: z.string() }))
+  .validator(z.object({ eventType: z.string() }))
   .handler(async ({ data }) => {
     const tmpl = EVENT_TEMPLATES[data.eventType];
     if (!tmpl) return null;
@@ -49,7 +49,7 @@ export const getEventTemplates = createServerFn({ method: "POST" })
   });
 
 export const sendTestWebhook = createServerFn({ method: "POST" })
-  .inputValidator(
+  .validator(
     z.object({
       token: z.string(),
       targetUrl: z.string().url(),
@@ -118,7 +118,7 @@ export const sendTestWebhook = createServerFn({ method: "POST" })
   });
 
 export const listWebhookLogs = createServerFn({ method: "POST" })
-  .inputValidator(
+  .validator(
     z.object({
       token: z.string(),
       filter: z.enum(["all", "delivered", "failed", "pending"]).optional().default("all"),
@@ -148,7 +148,7 @@ export const listWebhookLogs = createServerFn({ method: "POST" })
   });
 
 export const replayWebhook = createServerFn({ method: "POST" })
-  .inputValidator(
+  .validator(
     z.object({
       token: z.string(),
       logId: z.string().uuid(),
@@ -185,7 +185,7 @@ export const replayWebhook = createServerFn({ method: "POST" })
   });
 
 export const getWebhookHealth = createServerFn({ method: "POST" })
-  .inputValidator(z.object({ token: z.string() }))
+  .validator(z.object({ token: z.string() }))
   .handler(async ({ data }) => {
     const session = await getUserFromToken(data.token);
     if (!session) throw new Error("Unauthorized");

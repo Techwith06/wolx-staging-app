@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { Github, Mail, Lock, ArrowRight, ShieldCheck, Loader2 } from "lucide-react";
+import { Mail, Lock, ArrowRight, ShieldCheck, Loader2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -89,17 +89,9 @@ function LoginPage() {
             <p className="text-sm text-muted-foreground">Sign in to your Woolley-Tech workspace to continue.</p>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
-            <Button variant="outline" type="button"><Github className="mr-2 h-4 w-4" />GitHub</Button>
-            <Button variant="outline" type="button">
-              <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24"><path fill="currentColor" d="M21.35 11.1H12v3.2h5.35c-.23 1.45-1.6 4.25-5.35 4.25-3.22 0-5.85-2.67-5.85-5.95s2.63-5.95 5.85-5.95c1.83 0 3.06.78 3.76 1.45l2.57-2.48C16.93 4.13 14.69 3.2 12 3.2 6.92 3.2 2.8 7.32 2.8 12.4S6.92 21.6 12 21.6c6.93 0 9.5-4.85 9.5-7.4 0-.5-.05-.88-.15-1.1z"/></svg>
-              Google
-            </Button>
-          </div>
-
           <div className="flex items-center gap-3">
             <Separator className="flex-1" />
-            <span className="text-xs text-muted-foreground">OR CONTINUE WITH EMAIL</span>
+            <span className="text-xs text-muted-foreground">CONTINUE WITH EMAIL</span>
             <Separator className="flex-1" />
           </div>
 
