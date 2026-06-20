@@ -7,7 +7,7 @@ import { users, sessions } from "../db/schema";
 import { createSession, getUserFromToken, hashPassword, verifyPassword } from "../auth.server";
 
 export const signupUser = createServerFn({ method: "POST" })
-  .validator(
+  .inputValidator(
     z.object({
       name: z.string().min(1, "Name is required"),
       email: z.string().email("Invalid email"),
@@ -37,7 +37,7 @@ export const signupUser = createServerFn({ method: "POST" })
   });
 
 export const loginUser = createServerFn({ method: "POST" })
-  .validator(
+  .inputValidator(
     z.object({
       email: z.string().email("Invalid email"),
       password: z.string().min(1, "Password is required"),
@@ -65,14 +65,14 @@ export const loginUser = createServerFn({ method: "POST" })
   });
 
 export const getCurrentUser = createServerFn({ method: "POST" })
-  .validator(z.object({ token: z.string().optional() }))
+  .inputValidator(z.object({ token: z.string().optional() }))
   .handler(async ({ data }) => {
     if (!data.token) return null;
     return getUserFromToken(data.token);
   });
 
 export const logoutUser = createServerFn({ method: "POST" })
-  .validator(z.object({ token: z.string() }))
+  .inputValidator(z.object({ token: z.string() }))
   .handler(async ({ data }) => {
     const db = getDb();
     await db.delete(sessions).where(eq(sessions.token, data.token));

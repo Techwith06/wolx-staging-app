@@ -7,7 +7,7 @@ import { apiKeys, environments, requestLogs, webhookLogs } from "../db/schema";
 import { getUserFromToken } from "../auth.server";
 
 export const getOverviewData = createServerFn({ method: "POST" })
-  .validator(z.object({ token: z.string() }))
+  .inputValidator(z.object({ token: z.string() }))
   .handler(async ({ data }) => {
     const session = await getUserFromToken(data.token);
     if (!session) throw new Error("Unauthorized");

@@ -15,7 +15,7 @@ const endpointSchema = z.object({
 });
 
 export const saveGeneratedApi = createServerFn({ method: "POST" })
-  .validator(
+  .inputValidator(
     z.object({
       token: z.string(),
       name: z.string(),
@@ -55,7 +55,7 @@ export const saveGeneratedApi = createServerFn({ method: "POST" })
   });
 
 export const listSavedApis = createServerFn({ method: "POST" })
-  .validator(z.object({ token: z.string() }))
+  .inputValidator(z.object({ token: z.string() }))
   .handler(async ({ data }) => {
     const session = await getUserFromToken(data.token);
     if (!session) throw new Error("Unauthorized");
@@ -72,7 +72,7 @@ export const listSavedApis = createServerFn({ method: "POST" })
   });
 
 export const deleteSavedApi = createServerFn({ method: "POST" })
-  .validator(z.object({ token: z.string(), id: z.string() }))
+  .inputValidator(z.object({ token: z.string(), id: z.string() }))
   .handler(async ({ data }) => {
     const session = await getUserFromToken(data.token);
     if (!session) throw new Error("Unauthorized");

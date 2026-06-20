@@ -7,7 +7,7 @@ import { users, sessions, apiKeys, environments, requestLogs, webhookLogs } from
 import { getUserFromToken } from "../auth.server";
 
 export const getProfileData = createServerFn({ method: "POST" })
-  .validator(z.object({ token: z.string() }))
+  .inputValidator(z.object({ token: z.string() }))
   .handler(async ({ data }) => {
     const session = await getUserFromToken(data.token);
     if (!session) throw new Error("Unauthorized");
@@ -72,7 +72,7 @@ export const getProfileData = createServerFn({ method: "POST" })
   });
 
 export const updateProfile = createServerFn({ method: "POST" })
-  .validator(
+  .inputValidator(
     z.object({
       token: z.string(),
       name: z.string().min(1).optional(),

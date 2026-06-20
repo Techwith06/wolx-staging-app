@@ -7,7 +7,7 @@ import { environments } from "../db/schema";
 import { getUserFromToken } from "../auth.server";
 
 export const listEnvironments = createServerFn({ method: "POST" })
-  .validator(z.object({ token: z.string() }))
+  .inputValidator(z.object({ token: z.string() }))
   .handler(async ({ data }) => {
     const session = await getUserFromToken(data.token);
     if (!session) throw new Error("Unauthorized");
@@ -28,7 +28,7 @@ export const listEnvironments = createServerFn({ method: "POST" })
   });
 
 export const createEnvironment = createServerFn({ method: "POST" })
-  .validator(
+  .inputValidator(
     z.object({
       token: z.string(),
       name: z.string().min(1, "Name is required"),
@@ -61,7 +61,7 @@ export const createEnvironment = createServerFn({ method: "POST" })
   });
 
 export const updateEnvironment = createServerFn({ method: "POST" })
-  .validator(
+  .inputValidator(
     z.object({
       token: z.string(),
       envId: z.string().uuid(),
@@ -93,7 +93,7 @@ export const updateEnvironment = createServerFn({ method: "POST" })
   });
 
 export const deleteEnvironment = createServerFn({ method: "POST" })
-  .validator(
+  .inputValidator(
     z.object({ token: z.string(), envId: z.string().uuid() })
   )
   .handler(async ({ data }) => {
@@ -106,7 +106,7 @@ export const deleteEnvironment = createServerFn({ method: "POST" })
   });
 
 export const testEnvironmentConnection = createServerFn({ method: "POST" })
-  .validator(
+  .inputValidator(
     z.object({ token: z.string(), envId: z.string().uuid() })
   )
   .handler(async ({ data }) => {
