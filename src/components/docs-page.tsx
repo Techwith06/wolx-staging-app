@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { APP_URL } from "@/lib/constants";
 
 const DOC_SECTIONS = [
   { id: "getting-started", title: "Getting Started", icon: Terminal },
@@ -18,15 +19,15 @@ const DOC_SECTIONS = [
   { id: "errors", title: "Error Codes", icon: AlertTriangle },
 ];
 
-const SAMPLE_CODE = `curl -X GET https://api.example.com/users \\
+const SAMPLE_CODE = `curl -X GET ${APP_URL}/api/users \\
   -H "Authorization: Bearer YOUR_API_KEY"`;
 
-const SAMPLE_FETCH = `fetch('https://api.example.com/users', {
+const SAMPLE_FETCH = `fetch('${APP_URL}/api/users', {
   headers: { Authorization: 'Bearer YOUR_API_KEY' }
 })`;
 
 const SAMPLE_PYTHON = `import requests
-requests.get('https://api.example.com/users',
+requests.get('${APP_URL}/api/users',
   headers={'Authorization': 'Bearer YOUR_API_KEY'})`;
 
 const ERROR_CODES = [

@@ -16,6 +16,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/lib/auth-context";
 import { saveGeneratedApi, listSavedApis, deleteSavedApi } from "@/lib/api/generator.functions";
+import { APP_URL } from "@/lib/constants";
 
 type Framework = "express" | "nest" | "laravel" | "django" | "fastapi";
 type Database = "postgres" | "mongodb" | "mysql";
@@ -171,10 +172,10 @@ function generateCodeSamples(endpoints: Endpoint[], apiName: string, auth: AuthM
   const sample = endpoints[0];
   if (!sample) return {};
 
-  const curl = `curl -X ${sample.method} https://api.example.com${sample.path} \\
+  const curl = `curl -X ${sample.method} ${APP_URL}${sample.path} \\
   -H "Content-Type: application/json"${auth === "apikey" ? ' \\\n  -H "X-API-Key: YOUR_API_KEY"' : auth === "jwt" ? ' \\\n  -H "Authorization: Bearer YOUR_TOKEN"' : auth === "cookie" ? ' \\\n  -H "Cookie: wolx_token=YOUR_SESSION"' : ' \\\n  -H "Authorization: Bearer YOUR_OAUTH_TOKEN"'}${sample.requestBody ? ` \\\n  -d '${sample.requestBody.replace(/\n/g, "")}'` : ""}`;
 
-  const js = `fetch('https://api.example.com${sample.path}', {
+  const js = `fetch('${APP_URL}${sample.path}', {
   method: '${sample.method}',${auth !== "cookie" ? `\n  headers: {
     'Content-Type': 'application/json',${
       auth === "apikey" ? "\n    'X-API-Key': 'YOUR_API_KEY'" :
@@ -206,7 +207,7 @@ info:
   version: ${api.version}
   description: ${api.description}
 servers:
-  - url: https://api.example.com
+  - url: ${APP_URL}
 paths:
 ${paths}
 components:
@@ -224,7 +225,7 @@ function postmanCollection(api: GeneratedAPI): string {
     request: {
       method: e.method,
       header: [{ key: "Content-Type", value: "application/json" }],
-      url: { raw: `https://api.example.com${e.path}`, host: ["api", "example", "com"], path: e.path.split("/").filter(Boolean) },
+      url: { raw: `${APP_URL}${e.path}`, host: [new URL(APP_URL).hostname], path: e.path.split("/").filter(Boolean) },
       ...(e.requestBody ? { body: { mode: "raw", raw: e.requestBody } } : {}),
     },
   }));
@@ -246,7 +247,7 @@ export function ApiGeneratorPage({ onNavigate }: { onNavigate?: (tab: string) =>
   const [loadingSaved, setLoadingSaved] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saveMsg, setSaveMsg] = useState("");
-  const [baseUrl, setBaseUrl] = useState("https://api.example.com");
+  const [baseUrl, setBaseUrl] = useState(APP_URL);
   const [testing, setTesting] = useState(false);
   const [testResults, setTestResults] = useState<{ endpoint: string; method: string; status: number; body: string; duration: number }[] | null>(null);
 
@@ -676,7 +677,7 @@ export function ApiGeneratorPage({ onNavigate }: { onNavigate?: (tab: string) =>
                     <Input
                       value={baseUrl}
                       onChange={(e) => setBaseUrl(e.target.value)}
-                      placeholder="http://localhost:3000"
+                      placeholder={APP_URL}
                       className="h-7 text-[10px] font-mono"
                     />
                     <span className="text-[9px] text-muted-foreground whitespace-nowrap">Base URL</span>

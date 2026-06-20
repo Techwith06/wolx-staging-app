@@ -21,6 +21,7 @@ import {
   sendTestWebhook, listWebhookLogs, getWebhookHealth, replayWebhook, getEventTemplates,
 } from "@/lib/api/webhook-logs.functions";
 import { useAuth } from "@/lib/auth-context";
+import { APP_URL } from "@/lib/constants";
 
 const EVENT_TYPES = [
   { value: "payment.success", label: "Payment Success" },
@@ -182,7 +183,7 @@ export function WebhookTesterPage() {
             <strong className="text-foreground">Testing webhooks on localhost?</strong> Use a tunnel service to expose your local server:
             {" "}<code className="rounded bg-muted px-1 py-0.5 text-[10px]">ngrok http 3000</code>
             {" → "}<code className="rounded bg-muted px-1 py-0.5 text-[10px]">https://abc123.ngrok.app/webhook</code>
-            {" "}or {" "}<code className="rounded bg-muted px-1 py-0.5 text-[10px]">cloudflared tunnel --url http://localhost:3000</code>.
+            {" "}or {" "}<code className="rounded bg-muted px-1 py-0.5 text-[10px]">cloudflared tunnel --url {APP_URL}</code>.
           </div>
         </CardContent>
       </Card>
@@ -200,7 +201,7 @@ export function WebhookTesterPage() {
               <Label className="text-xs text-muted-foreground">Your Webhook URL</Label>
               <Input
                 className="mt-1 font-mono text-xs"
-                placeholder="https://yourapp.com/api/webhooks"
+                placeholder={`${APP_URL}/api/webhooks`}
                 value={targetUrl}
                 onChange={(e) => setTargetUrl(e.target.value)}
               />
